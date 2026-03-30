@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI with Peers – Level Up Together!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --clay-bg: #FFF8F0;
+    --clay-warm: #F4845F;
+    --clay-orange: #F27059;
+    --clay-yellow: #FFD166;
+    --clay-green: #83C5A2;
+    --clay-blue: #6AABD2;
+    --clay-purple: #B388EB;
+    --clay-dark: #3D3229;
+    --clay-cream: #FFF1E0;
+    --clay-shadow: rgba(61, 50, 41, 0.15);
+    --clay-deep-shadow: rgba(61, 50, 41, 0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--clay-bg);
+    color: var(--clay-dark);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== HERO SECTION ===== */
+  .hero {
+    background: linear-gradient(170deg, #FFF1E0 0%, #FFE8D0 40%, #FDDCBF 100%);
+    padding: 24px 20px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: var(--clay-yellow);
+    border-radius: 50%;
+    opacity: 0.15;
+    filter: blur(40px);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 160px; height: 160px;
+    background: var(--clay-warm);
+    border-radius: 50%;
+    opacity: 0.1;
+    filter: blur(30px);
+  }
+
+  /* ===== COUNTDOWN ===== */
+  .countdown-wrapper {
+    margin-bottom: 20px;
+    animation: fadeSlideDown 0.8s ease-out;
+  }
+
+  .countdown-label {
+    font-family: 'Baloo 2', cursive;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--clay-warm);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .countdown-unit {
+    background: white;
+    border-radius: 16px;
+    padding: 10px 16px;
+    min-width: 68px;
+    box-shadow: 0 4px 12px var(--clay-shadow), 0 2px 4px rgba(61,50,41,0.08);
+    border: 2px solid rgba(244, 132, 95, 0.12);
+  }
+
+  .countdown-unit .number {
+    font-family: 'Baloo 2', cursive;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--clay-warm);
+    line-height: 1;
+  }
+
+  .countdown-unit .label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #A08878;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .event-passed-msg {
+    display: none;
+    font-family: 'Baloo 2', cursive;
+    font-size: 18px;
+    color: var(--clay-warm);
+    background: white;
+    border-radius: 16px;
+    padding: 14px 24px;
+    box-shadow: 0 4px 12px var(--clay-shadow);
+    display: inline-block;
+  }
+
+  /* ===== JOIN BUTTON ===== */
+  .join-btn-wrapper {
+    margin: 20px 0 24px;
+    animation: fadeSlideUp 0.8s ease-out 0.2s both;
+  }
+
+  .join-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--clay-warm) 0%, #E8634A 100%);
+    color: white;
+    text-decoration: none;
+    font-family: 'Baloo 2', cursive;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 16px 36px;
+    border-radius: 50px;
+    box-shadow: 0 6px 20px rgba(244, 132, 95, 0.4), 0 2px 6px rgba(244, 132, 95, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .join-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 28px rgba(244, 132, 95, 0.5), 0 4px 10px rgba(244, 132, 95, 0.3);
+  }
+
+  .join-btn:active { transform: translateY(0) scale(0.98); }
+
+  .join-btn .pulse-dot {
+    width: 10px; height: 10px;
+    background: #7EFF8E;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  .join-btn-sub {
+    font-size: 13px;
+    color: #A08878;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  /* ===== TITLE ===== */
+  .hero-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: clamp(28px, 6vw, 42px);
+    font-weight: 800;
+    color: var(--clay-dark);
+    line-height: 1.15;
+    margin-bottom: 8px;
+    animation: fadeSlideUp 0.8s ease-out 0.3s both;
+  }
+
+  .hero-title .highlight {
+    background: linear-gradient(135deg, var(--clay-warm), var(--clay-orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+    color: #7A6A5A;
+    max-width: 420px;
+    margin: 0 auto 16px;
+    line-height: 1.5;
+    font-weight: 600;
+    animation: fadeSlideUp 0.8s ease-out 0.4s both;
+  }
+
+  .hero-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--clay-dark);
+    box-shadow: 0 3px 10px var(--clay-shadow);
+    animation: fadeSlideUp 0.8s ease-out 0.5s both;
+  }
+
+  /* ===== CLAY ILLUSTRATION ===== */
+  .clay-scene {
+    margin: 24px auto 0;
+    max-width: 380px;
+    animation: fadeSlideUp 0.8s ease-out 0.6s both;
+  }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    padding: 40px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .section-tag {
+    font-family: 'Baloo 2', cursive;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--clay-warm);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: clamp(22px, 5vw, 28px);
+    font-weight: 800;
+    color: var(--clay-dark);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .section-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #5A4A3A;
+    font-weight: 600;
+  }
+
+  /* ===== WHY SECTION ===== */
+  .why-section {
+    background: linear-gradient(180deg, var(--clay-bg) 0%, var(--clay-cream) 100%);
+  }
+
+  .why-cards {
+    display: grid;
+    gap: 14px;
+    margin-top: 20px;
+  }
+
+  .why-card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 14px var(--clay-shadow);
+    border: 2px solid rgba(244, 132, 95, 0.06);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: transform 0.2s ease;
+  }
+
+  .why-card:hover { transform: translateY(-2px); }
+
+  .why-card .icon {
+    font-size: 28px;
+    flex-shrink: 0;
+    width: 48px; height: 48px;
+    background: var(--clay-cream);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .why-card h3 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--clay-dark);
+    margin-bottom: 4px;
+  }
+
+  .why-card p {
+    font-size: 14px;
+    color: #7A6A5A;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  /* ===== FLOW SECTION ===== */
+  .flow-section {
+    background: white;
+  }
+
+  .flow-timeline {
+    margin-top: 20px;
+    position: relative;
+  }
+
+  .flow-timeline::before {
+    content: '';
+    position: absolute;
+    left: 23px;
+    top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--clay-yellow), var(--clay-warm), var(--clay-green));
+    border-radius: 2px;
+  }
+
+  .flow-item {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .flow-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+    z-index: 1;
+    box-shadow: 0 2px 6px var(--clay-shadow);
+    position: relative;
+    left: 17px;
+  }
+
+  .flow-content {
+    background: var(--clay-cream);
+    border-radius: 16px;
+    padding: 14px 18px;
+    flex: 1;
+    margin-left: 8px;
+  }
+
+  .flow-time {
+    font-family: 'Baloo 2', cursive;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--clay-warm);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .flow-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--clay-dark);
+    margin: 2px 0;
+  }
+
+  .flow-desc {
+    font-size: 13px;
+    color: #7A6A5A;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  /* ===== RISKS ===== */
+  .risks-section {
+    background: linear-gradient(180deg, var(--clay-cream) 0%, var(--clay-bg) 100%);
+  }
+
+  .risk-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .risk-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 3px 10px var(--clay-shadow);
+    border: 2px solid transparent;
+  }
+
+  .risk-card.human { border-color: rgba(131, 197, 162, 0.3); }
+  .risk-card.ai { border-color: rgba(106, 171, 210, 0.3); }
+
+  .risk-card .emoji { font-size: 28px; margin-bottom: 6px; }
+
+  .risk-card h4 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .risk-card.human h4 { color: #4A8B6A; }
+  .risk-card.ai h4 { color: var(--clay-blue); }
+
+  .risk-card p {
+    font-size: 12px;
+    color: #7A6A5A;
+    line-height: 1.4;
+    font-weight: 600;
+  }
+
+  /* ===== WHO IS THIS FOR ===== */
+  .audience-section {
+    background: white;
+  }
+
+  .audience-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .audience-tag {
+    background: var(--clay-cream);
+    border-radius: 50px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--clay-dark);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 6px var(--clay-shadow);
+  }
+
+  /* ===== FOOTER CTA ===== */
+  .footer-cta {
+    background: linear-gradient(170deg, var(--clay-dark) 0%, #2A221A 100%);
+    padding: 40px 20px;
+    text-align: center;
+    border-radius: 32px 32px 0 0;
+  }
+
+  .footer-cta .section-title { color: white; }
+  .footer-cta .section-text { color: rgba(255,255,255,0.65); }
+
+  .footer-cta .join-btn {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+
+  .footer-host {
+    margin-top: 24px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 600;
+  }
+
+  .footer-host span {
+    color: rgba(255,255,255,0.7);
+    font-weight: 700;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .float-1 { animation: float 3s ease-in-out infinite; }
+  .float-2 { animation: float 3.5s ease-in-out infinite 0.5s; }
+  .float-3 { animation: float 4s ease-in-out infinite 1s; }
+
+  /* ===== DIVIDER ===== */
+  .clay-divider {
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--clay-yellow), var(--clay-warm), var(--clay-green), transparent);
+    border-radius: 2px;
+    margin: 0 40px;
+    opacity: 0.4;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 420px) {
+    .risk-grid { grid-template-columns: 1fr; }
+    .countdown-unit { min-width: 58px; padding: 8px 12px; }
+    .countdown-unit .number { font-size: 24px; }
+    .join-btn { font-size: 17px; padding: 14px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="countdown-wrapper">
+    <div class="countdown-label">Starts in</div>
+    <div class="countdown" id="countdown">
+      <div class="countdown-unit">
+        <div class="number" id="cd-days">--</div>
+        <div class="label">Days</div>
+      </div>
+      <div class="countdown-unit">
+        <div class="number" id="cd-hours">--</div>
+        <div class="label">Hours</div>
+      </div>
+      <div class="countdown-unit">
+        <div class="number" id="cd-mins">--</div>
+        <div class="label">Mins</div>
+      </div>
+      <div class="countdown-unit">
+        <div class="number" id="cd-secs">--</div>
+        <div class="label">Secs</div>
+      </div>
+    </div>
+    <div class="event-passed-msg" id="event-passed" style="display:none;">
+      🎉 The session has started — jump in!
+    </div>
+  </div>
+
+  <div class="join-btn-wrapper">
+    <a href="https://us04web.zoom.us/j/79423112586?pwd=3ZDOG6jmoQuSXVacbswfl4xMk8iEnr.1" target="_blank" class="join-btn" id="joinBtn">
+      <span class="pulse-dot"></span>
+      Join the Zoom Room
+    </a>
+    <div class="join-btn-sub">Meeting ID: 794 2311 2586 · Passcode: 4kEXRc</div>
+  </div>
+
+  <h1 class="hero-title">
+    AI with Peers –<br><span class="highlight">Level Up Together!</span>
+  </h1>
+
+  <p class="hero-subtitle">
+    Not a lecture. Not a webinar. Just a bunch of us in a room, figuring out AI together — with real demos, honest mistakes, and chai-worthy conversation.
+  </p>
+
+  <div class="hero-date">
+    📅 Wed, 1st April 2026 &nbsp;·&nbsp; 🕕 6:00 – 7:30 PM IST
+  </div>
+
+  <!-- Clay Scene SVG -->
+  <div class="clay-scene">
+    <svg viewBox="0 0 380 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <!-- Desk -->
+      <rect x="40" y="140" width="300" height="18" rx="9" fill="#D4A574" opacity="0.5"/>
+      <rect x="60" y="148" width="260" height="10" rx="5" fill="#C49564" opacity="0.3"/>
+
+      <!-- Chai cup -->
+      <g class="float-3">
+        <rect x="70" y="118" width="28" height="22" rx="6" fill="#E8835A"/>
+        <rect x="74" y="122" width="20" height="14" rx="4" fill="#B8654A"/>
+        <ellipse cx="84" cy="118" rx="14" ry="3" fill="#F4A57A" opacity="0.5"/>
+        <!-- steam -->
+        <path d="M80 112 Q82 105 78 98" stroke="#D4A574" stroke-width="2" fill="none" opacity="0.4"/>
+        <path d="M88 110 Q90 103 86 96" stroke="#D4A574" stroke-width="2" fill="none" opacity="0.3"/>
+      </g>
+
+      <!-- Sticky notes -->
+      <g class="float-2">
+        <rect x="110" y="110" width="30" height="28" rx="4" fill="#FFD166" transform="rotate(-5 125 124)" opacity="0.8"/>
+        <rect x="130" y="114" width="30" height="28" rx="4" fill="#83C5A2" transform="rotate(3 145 128)" opacity="0.8"/>
+      </g>
+
+      <!-- Phone (Instagram side) -->
+      <g class="float-1">
+        <rect x="45" y="50" width="50" height="80" rx="10" fill="#3D3229"/>
+        <rect x="49" y="56" width="42" height="68" rx="6" fill="white"/>
+        <!-- Instagram reel mockup -->
+        <rect x="53" y="60" width="34" height="44" rx="4" fill="linear-gradient(#F56040, #C13584)"/>
+        <rect x="53" y="60" width="34" height="44" rx="4" fill="#E8634A" opacity="0.7"/>
+        <circle cx="70" cy="78" r="8" fill="white" opacity="0.3"/>
+        <polygon points="67,75 67,81 74,78" fill="white" opacity="0.6"/>
+        <!-- play btn -->
+        <rect x="55" y="108" width="30" height="6" rx="3" fill="#DDD"/>
+        <rect x="55" y="116" width="20" height="4" rx="2" fill="#EEE"/>
+      </g>
+
+      <!-- Arrow from phone to AI icons -->
+      <path d="M100 90 Q140 85 170 80" stroke="var(--clay-warm)" stroke-width="3" fill="none" stroke-dasharray="6 4" opacity="0.5"/>
+      <polygon points="170,77 170,83 178,80" fill="var(--clay-warm)" opacity="0.5"/>
+
+      <!-- AI Icons cluster -->
+      <!-- ChatGPT -->
+      <g class="float-1">
+        <circle cx="210" cy="65" r="18" fill="#10A37F" opacity="0.85"/>
+        <text x="210" y="70" text-anchor="middle" fill="white" font-size="9" font-weight="800" font-family="Nunito">GPT</text>
+      </g>
+      <!-- Claude -->
+      <g class="float-2">
+        <circle cx="250" cy="50" r="18" fill="#D97757" opacity="0.85"/>
+        <text x="250" y="55" text-anchor="middle" fill="white" font-size="8" font-weight="800" font-family="Nunito">Claude</text>
+      </g>
+      <!-- Gemini -->
+      <g class="float-3">
+        <circle cx="290" cy="70" r="16" fill="#4285F4" opacity="0.85"/>
+        <text x="290" y="74" text-anchor="middle" fill="white" font-size="7.5" font-weight="800" font-family="Nunito">Gemini</text>
+      </g>
+      <!-- Grok -->
+      <g class="float-1">
+        <circle cx="232" cy="100" r="14" fill="#1DA1F2" opacity="0.7"/>
+        <text x="232" y="104" text-anchor="middle" fill="white" font-size="7.5" font-weight="800" font-family="Nunito">Grok</text>
+      </g>
+      <!-- NotebookLM -->
+      <g class="float-2">
+        <circle cx="272" cy="105" r="14" fill="#EA4335" opacity="0.7"/>
+        <text x="272" y="108" text-anchor="middle" fill="white" font-size="5.5" font-weight="800" font-family="Nunito">NBook</text>
+      </g>
+
+      <!-- Floating idea icons -->
+      <g class="float-3" opacity="0.6">
+        <text x="190" y="30" font-size="18">💡</text>
+      </g>
+      <g class="float-1" opacity="0.6">
+        <text x="260" y="25" font-size="16">⚙️</text>
+      </g>
+      <g class="float-2" opacity="0.6">
+        <text x="310" y="40" font-size="14">📈</text>
+      </g>
+      <g class="float-3" opacity="0.5">
+        <text x="320" y="115" font-size="13">🩺</text>
+      </g>
+
+      <!-- Person silhouette (simple clay figure) -->
+      <g class="float-1" transform="translate(155, 55)">
+        <circle cx="12" cy="0" r="10" fill="#F4A57A"/>
+        <rect x="2" y="10" width="20" height="28" rx="8" fill="#6AABD2"/>
+        <!-- smile -->
+        <path d="M8 3 Q12 7 16 3" stroke="#3D3229" stroke-width="1.5" fill="none"/>
+        <!-- eyes -->
+        <circle cx="9" cy="-2" r="1.2" fill="#3D3229"/>
+        <circle cx="15" cy="-2" r="1.2" fill="#3D3229"/>
+        <!-- hair -->
+        <path d="M3 -4 Q12 -14 21 -4" fill="#3D3229" opacity="0.8"/>
+        <!-- phone in hand -->
+        <rect x="22" y="16" width="10" height="16" rx="3" fill="#3D3229" opacity="0.6"/>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- ===== WHY THIS SESSION ===== -->
+<section class="section why-section">
+  <div class="section-tag">The real talk</div>
+  <h2 class="section-title">Why sit together for this?</h2>
+  <p class="section-text">
+    AI isn't just for coders or tech folks. It's a tool — like Excel was, like Google was. The people who learn to use it well, early, will have an edge. The people who don't, won't disappear — but they'll work harder for the same results. This session is about getting that head start, together.
+  </p>
+
+  <div class="why-cards">
+    <div class="why-card">
+      <div class="icon">🔍</div>
+      <div>
+        <h3>See what's actually possible</h3>
+        <p>Not hype. Not theory. Actual demos of AI doing real tasks — job prep, research, planning, investing — in real time.</p>
+      </div>
+    </div>
+    <div class="why-card">
+      <div class="icon">🤝</div>
+      <div>
+        <h3>Learn from each other's experiments</h3>
+        <p>Someone in the room is using AI in a way you haven't thought of. Let's surface that.</p>
+      </div>
+    </div>
+    <div class="why-card">
+      <div class="icon">⚡</div>
+      <div>
+        <h3>Cut your learning curve in half</h3>
+        <p>Instead of each of us fumbling alone, we pool what works. One hour here saves you weeks of trial and error.</p>
+      </div>
+    </div>
+    <div class="why-card">
+      <div class="icon">⚠️</div>
+      <div>
+        <h3>Know the risks, not just the magic</h3>
+        <p>AI gets things wrong. It hallucinates. It has blind spots. Knowing where humans win is just as important.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clay-divider"></div>
+
+<!-- ===== SESSION FLOW ===== -->
+<section class="section flow-section">
+  <div class="section-tag">How it flows</div>
+  <h2 class="section-title">90 minutes. No slides. All action.</h2>
+
+  <div class="flow-timeline">
+    <div class="flow-item">
+      <div class="flow-dot" style="background: var(--clay-yellow);"></div>
+      <div class="flow-content">
+        <div class="flow-time">0 – 10 min</div>
+        <div class="flow-title">☕ Quick hello + show of hands</div>
+        <div class="flow-desc">Who's used ChatGPT? Gemini? Claude? Anything at all? Let's get a pulse of the room.</div>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot" style="background: var(--clay-warm);"></div>
+      <div class="flow-content">
+        <div class="flow-time">10 – 20 min</div>
+        <div class="flow-title">🗺️ The AI landscape in 5 minutes</div>
+        <div class="flow-desc">Which AI does what? A quick, no-jargon map so everyone's on the same page. No tech talk, promise.</div>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot" style="background: var(--clay-orange);"></div>
+      <div class="flow-content">
+        <div class="flow-time">20 – 25 min</div>
+        <div class="flow-title">📊 You pick the topic — live poll</div>
+        <div class="flow-desc">We'll run a quick Zoom poll. You choose what I research live. Could be investments, interview prep, trip planning — anything.</div>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot" style="background: var(--clay-blue);"></div>
+      <div class="flow-content">
+        <div class="flow-time">25 – 55 min</div>
+        <div class="flow-title">🔴 Live demo — AI in action</div>
+        <div class="flow-desc">I'll pick up whatever you voted for and actually do it live. You'll see the prompts, the mistakes, the iterations. The messy reality.</div>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot" style="background: var(--clay-green);"></div>
+      <div class="flow-content">
+        <div class="flow-time">55 – 75 min</div>
+        <div class="flow-title">🎤 Open mic — how are YOU using AI?</div>
+        <div class="flow-desc">Your turn. Share what you've tried. What worked. What flopped. This is where the real gold is.</div>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot" style="background: var(--clay-purple);"></div>
+      <div class="flow-content">
+        <div class="flow-time">75 – 90 min</div>
+        <div class="flow-title">🧠 Risks, limits & wrap up</div>
+        <div class="flow-desc">What AI can't do. Where humans are irreplaceable. And what we want to explore next time.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="clay-divider"></div>
+
+<!-- ===== HUMAN vs AI ===== -->
+<section class="section risks-section">
+  <div class="section-tag">The balance</div>
+  <h2 class="section-title">AI is powerful. But it's not everything.</h2>
+  <p class="section-text" style="margin-bottom:16px;">
+    Using AI without understanding its limits is like driving without knowing the brakes. We'll talk about both sides.
+  </p>
+
+  <div class="risk-grid">
+    <div class="risk-card ai">
+      <div class="emoji">🤖</div>
+      <h4>AI is great at</h4>
+      <p>Speed. Pattern recognition. Drafting. Research across 1000 sources in seconds.</p>
+    </div>
+    <div class="risk-card human">
+      <div class="emoji">🧑</div>
+      <h4>Humans win at</h4>
+      <p>Judgment. Context. Relationships. Knowing when something "feels off."</p>
+    </div>
+    <div class="risk-card ai">
+      <div class="emoji">⚠️</div>
+      <h4>AI risks</h4>
+      <p>Hallucinations. Overconfidence. Privacy leaks. Blind trust without verification.</p>
+    </div>
+    <div class="risk-card human">
+      <div class="emoji">🛡️</div>
+      <h4>Your edge</h4>
+      <p>Ask better questions. Verify outputs. Use AI as a tool, not a replacement for thinking.</p>
+    </div>
+  </div>
+</section>
+
+<div class="clay-divider"></div>
+
+<!-- ===== WHO IS THIS FOR ===== -->
+<section class="section audience-section">
+  <div class="section-tag">For everyone</div>
+  <h2 class="section-title">If you're curious, you belong here.</h2>
+  <p class="section-text" style="margin-bottom:12px;">
+    No coding needed. No tech background required. If you've ever Googled something, you already have the base skill.
+  </p>
+
+  <div class="audience-tags">
+    <span class="audience-tag">🩺 Doctors</span>
+    <span class="audience-tag">📊 Data entry folks</span>
+    <span class="audience-tag">💼 Job hunters</span>
+    <span class="audience-tag">📚 Students</span>
+    <span class="audience-tag">💰 Investors</span>
+    <span class="audience-tag">🎨 Creatives</span>
+    <span class="audience-tag">🏪 Business owners</span>
+    <span class="audience-tag">🤷 Just curious</span>
+  </div>
+</section>
+
+<!-- ===== FOOTER CTA ===== -->
+<section class="footer-cta">
+  <h2 class="section-title">See you on Wednesday? ☕</h2>
+  <p class="section-text">1st April 2026 · 6:00 PM IST · 90 minutes · Zoom</p>
+  <a href="https://us04web.zoom.us/j/79423112586?pwd=3ZDOG6jmoQuSXVacbswfl4xMk8iEnr.1" target="_blank" class="join-btn">
+    <span class="pulse-dot"></span>
+    Join the Zoom Room
+  </a>
+  <div class="footer-host">
+    Hosted by <span>Adarsh Golait</span> · Learning in public, one experiment at a time.
+  </div>
+</section>
+
+<script>
+  // Countdown to April 1, 2026, 6:00 PM IST (UTC+5:30)
+  const eventDate = new Date('2026-04-01T12:30:00Z'); // 6:00 PM IST = 12:30 UTC
+
+  function updateCountdown() {
+    const now = new Date();
+    const diff = eventDate - now;
+
+    if (diff <= 0) {
+      document.getElementById('countdown').style.display = 'none';
+      document.querySelector('.countdown-label').style.display = 'none';
+      document.getElementById('event-passed').style.display = 'inline-block';
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+    document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+    document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>
+
+</body>
+</html>
